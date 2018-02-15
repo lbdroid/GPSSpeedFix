@@ -12,7 +12,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 public class GPSSpeedFixModule implements IXposedHookLoadPackage {
     private static final String TAG = "GPSSpeedFix";
     private static final String SERVICE = "com.android.server.location.GpsLocationProvider";
-    private Location[] mLocation = new Location[5];
+    private Location[] mLocation = new Location[3];
     private float lastAcceptableBearing = 0;
     private float distance = 0;
     private long time = 0;
@@ -46,13 +46,13 @@ public class GPSSpeedFixModule implements IXposedHookLoadPackage {
                 param.args[4] = distance / time; // speed in meters per second.
             } // else we just leave the speed from HAL alone.
 
-            if (minSamples < 5){
+            if (minSamples < 3){
                 mLocation[minSamples] = l;
                 minSamples++;
                 lastAcceptableBearing = (float)param.args[5];
             } else {
-                for (int i=0; i<4; i++) mLocation[i] = mLocation[i+1];
-                mLocation[4] = l;
+                for (int i=0; i<2; i++) mLocation[i] = mLocation[i+1];
+                mLocation[2] = l;
             }
 
             if ((int) param.args[4] < 1) param.args[5] = lastAcceptableBearing;
