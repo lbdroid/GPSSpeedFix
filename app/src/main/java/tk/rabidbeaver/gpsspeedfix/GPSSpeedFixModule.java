@@ -55,7 +55,7 @@ public class GPSSpeedFixModule implements IXposedHookLoadPackage {
                 mLocation[4] = l;
             }
 
-            if (speed < 1) param.args[5] = lastAcceptableBearing;
+            if ((int) param.args[4] < 1) param.args[5] = lastAcceptableBearing;
             else lastAcceptableBearing = (float)param.args[5];
         }
     };
